@@ -3,6 +3,13 @@ from PIL import Image
 from PIL import ImageTk 
 
 
+def nbrCol(matrice):
+    return(len(matrice[0]))
+
+def nbrLig(matrice):
+    return len(matrice)
+
+
 def saving(matPix, filename):#sauvegarde l'image contenue dans matpix dans le fichier filename
 							 #utiliser une extension png pour que la fonction fonctionne sans perte d'information
     toSave=pil.Image.new(mode = "1", size = (nbrCol(matPix),nbrLig(matPix)))
@@ -19,3 +26,12 @@ def loading(filename):#charge le fichier image filename et renvoie une matrice d
         for j in range(toLoad.size[0]):
             mat[i][j]= 0 if toLoad.getpixel((j,i)) == 0 else 1
     return mat
+
+# noir = 1
+# blanc  = 0
+h = loading("coin.png")
+for i in h:
+    print(i)
+
+
+
