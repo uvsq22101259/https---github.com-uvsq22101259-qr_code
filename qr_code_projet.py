@@ -42,23 +42,22 @@ def chek_coin(matrice):
     matrice = loading(matrice)
     test = squellette()
     chek = 0
-    print(matrice[0][17:])
-    # print(test[0][: :-1])
+
     for i in range (8):
         if matrice[i][:8] == test[i] and matrice[-i+(-1)][:8] == test[i] and matrice[i][17:] == test[i] [: :-1] :
-            chek += 1
+            chek  = True
             pass
         else: 
             print("ce n'est pa un bon carré" )
-            matrice = rotation_v(matrice)
-    if chek >=6 :        
+            matrice = rotate(matrice)
+    if chek == True :        
         print("les qr code est dans la bonne position")
 
 
 def rotation_v(matrice):
     matrice = loading(matrice)
     matrice.reverse()
-    saving(matrice,"essai.png")
+    saving(matrice,"essai_2.png")
     
     return matrice
 
@@ -69,8 +68,17 @@ def rotation_h(matrice):
     return matrice
     
     
+def rotate(mat):
+    matrotate=[]
+    for i in range(nbrLig(mat)):
+        a = []
+        for j in range(nbrCol(mat)):
+            a.append(mat[nbrLig(mat)-j-1][i])
+        matrotate.append(a)
+    mat = list(matrotate)
+    return mat
 
 
 
 
-rotation_v("qr_code_ssfiltre_ascii_rotation.png")
+chek_coin("qr_code_ssfiltre_ascii_rotation.png")
