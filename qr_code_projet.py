@@ -82,7 +82,7 @@ def rotate(matrice):
     return matrice
 
 
-def decode(l):
+def verification(l):
     d1,d2,d3,d4,p1,p2,p3 = l
     c = [True,True,True]
     correction = ""
@@ -121,12 +121,83 @@ def decode(l):
         correction = "aucune correction"
     l = d1,d2,d3,d4,p1,p2,p3
     d = d1,d2,d3,d4
-    print (correction)
-    return(d)
-a = decode([0, 1, 1, 0, 1, 1, 0])
-print(a)
+ 
+    return(l)
+# a = decode([0, 1, 1, 0, 1, 1, 0])
+# print(a)
+
+
+def read_bolc(m):
+    a  = []
+    # for i in range (nbrCol(m)):
+    b = []
+    
+    sens = True
+    for i in range (1,nbrCol(m)+1,2):
+
+        if sens == True  and i < len(m)-7 :
+            case = 0
+            for j in range (2):
+                b = []
+                while len(b) < 14 :
+                    case += 1
+                    b.append(m[-i][-case])
+                    b.append(m[-i-1][-case])
+
+                a.append(b)
+        
+        elif sens == False and i <= len(m)-7:
+            case = 15
+            for j in range (2):
+                b = []
+                while len(b) < 14 :
+                    case -= 1
+                    b.append(m[-i][-case])
+                    b.append(m[-i-1][-case])
+
+                a.append(b)
+        sens = not sens
+    return a
+
+
+
+def decoupage(m):
+    a =[]
+    for i in m:
+        if i.count(1) != len(i):
+            a.append(i[:7])
+            a.append(i[7:])
+        
+    return a
 
 
 
 
-# check_alternance("qr_code_ssfiltre_ascii_rotation.png")
+def decodage(m) :
+    message = ""
+    for i in range (0,len(m)-1,2):
+        code_bi = ""
+        for j in range (4):
+            code_bi += str(m[i][j])
+        for j in range (4):
+            code_bi += str(m[i+1][j])
+        code_num = int(code_bi,2)
+        print(code_bi)
+        print(code_num)
+        message += chr(code_num)
+    # print(message)
+    return message
+
+m = loading("qr_code_ssfiltre_ascii.png")
+
+b = read_bolc(m)
+
+c =decoupage(b)
+print(c)
+for i in range (len(c)):
+    c[i] = verification(c[i])
+A = [[0,1,1,0,1,0,0,0],[0,1,1,0,0,1,0,1,],[0,1,1,0,1,1,0,0],[0,1,1,0,1,1,0,0],[0,1,1,0,1,1,1,1],[0,0,1,0,0,0,0,0],[0,1,1,0,0,0,1,1],[0,1,1,0,0,0,0,1],[0,0,1,0,0,0,0,0],[0,1,1,1,0,1,1,0],[0,1,1,0,0,0,0,1],[0,0,1,0,0,0,0,0],[0,0,1,1,1,1,1,1]]
+d = decodage(c)
+# print('hello' ,d)
+print(d)
+
