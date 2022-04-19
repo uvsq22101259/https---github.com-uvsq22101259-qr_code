@@ -83,7 +83,7 @@ def rotate(matrice):
 
 
 def verification(l):
-    d1,d2,d3,d4,p1,p2,p3 = l
+    p1,p2,p3,d1,d2,d3,d4 = l
     c = [True,True,True]
     correction = ""
     if p1 != ((d1 + d2 + d4) % 2):
@@ -119,7 +119,7 @@ def verification(l):
                 correction = "p3"
     else : 
         correction = "aucune correction"
-    l = d1,d2,d3,d4,p1,p2,p3
+    l = p1,p2,p3,d1,d2,d3,d4
     d = d1,d2,d3,d4
  
     return(l)
@@ -165,8 +165,8 @@ def decoupage(m):
     a =[]
     for i in m:
         if i.count(1) != len(i):
-            a.append(i[:7])
-            a.append(i[7:])
+            a.append(i[-1:-8:-1])
+            a.append(i[-8::-1])
         
     return a
 
@@ -177,9 +177,9 @@ def decodage(m) :
     message = ""
     for i in range (0,len(m)-1,2):
         code_bi = ""
-        for j in range (4):
+        for j in range (3,7):
             code_bi += str(m[i][j])
-        for j in range (4):
+        for j in range (3,7):
             code_bi += str(m[i+1][j])
         code_num = int(code_bi,2)
         print(code_bi)
@@ -188,16 +188,48 @@ def decodage(m) :
     # print(message)
     return message
 
-m = loading("qr_code_ssfiltre_ascii.png")
+
+
+
+
+def decodage_hex(m) :
+    message = ""
+    for i in range (0,len(m)-1,2):
+        multiplicateur = 8
+        code_hexa = ""
+        code_bi_1 = 0
+        code_bi_2 = 0
+        for j in range (3,7):
+            code_bi_1 += (m[i][j])*multiplicateur
+            multiplicateur //= 2
+        multiplicateur = 8
+        for j in range (3,7):
+            code_bi_2 += (m[i+1][j])*multiplicateur
+            multiplicateur //= 2
+        print(code_bi_1,code_bi_2)
+        code_hexa = hex(code_bi_1)[2:].zfill(0) + hex(code_bi_2) [2:].zfill(0) 
+        code_hexa = int(code_hexa,16)
+        message += chr(code_hexa)
+
+    return message,"hey"
+        
+        
+     
+
+
+
+
+m = loading("qr_code_ssfiltre_num.png")
 
 b = read_bolc(m)
 
 c =decoupage(b)
 print(c)
-for i in range (len(c)):
-    c[i] = verification(c[i])
-A = [[0,1,1,0,1,0,0,0],[0,1,1,0,0,1,0,1,],[0,1,1,0,1,1,0,0],[0,1,1,0,1,1,0,0],[0,1,1,0,1,1,1,1],[0,0,1,0,0,0,0,0],[0,1,1,0,0,0,1,1],[0,1,1,0,0,0,0,1],[0,0,1,0,0,0,0,0],[0,1,1,1,0,1,1,0],[0,1,1,0,0,0,0,1],[0,0,1,0,0,0,0,0],[0,0,1,1,1,1,1,1]]
-d = decodage(c)
+# for i in range (len(c)):
+#     c[i] = verification(c[i])
+# print(verification(c[1]))
+  
+d = decodage_hex(c)
 # print('hello' ,d)
 print(d)
 
